@@ -1,8 +1,12 @@
+# BOHR Overview
+
+BOHR is a tool, packaged as a library, to support developers to search for Atoms of Confusion (AoC) in Java programs. The current version of BHOR is capable to search for 10 different types of AoC (listed below). Additionally, BOHR provides an API for extensions, which makes it possible for developers to create new customizable searchers.   
+
 # Rules for the detection of Atoms of Confusion in Java
 
 ## Infix Operator Precedence
 
-Occurs when more than one type of binary operator is used in a code instruction. The confusion of this atom is caused by a misunderstanding of the order of execution of these operators. The multiplication, division and modulus operators have execution precedence over the addition and subtraction operators, as well as the and operators (&&) have execution precedence over the or operators (||). The transformed variant of this atom includes parentheses around the operations to make the order of these operations clearer, making the code expression more readable and easier to understand. BOHR detects this atom when arithmetic and logical expressions do not have parentheses around operations with higher precedence.
+Occurs when more than one type of binary operator is used in a code instruction. The confusion of this atom is caused by a misunderstanding of the order of execution of these operators. The multiplication, division and modulus operators have execution precedence over the addition and subtraction operators, as well as the and operators (`&&`) have execution precedence over the or operators (`||`). The transformed variant of this atom includes parentheses around the operations to make the order of these operations clearer, making the code expression more readable and easier to understand. BOHR detects this atom when arithmetic and logical expressions do not have parentheses around operations with higher precedence.
 
 ```
 int a = 2 + 2 * 4;
@@ -18,7 +22,7 @@ if(a || b && c) {
 
 ## Pre Increment/Decrement
 
-Consists on the use of the pre increment/decrement unary operators (++ and - -). The pre increment/decrement unary operator increments/decrements the variable it is associated with and returns the result of the expression. The lack of familiarity with this operator generates doubts about its operation, which can cause confusion. Moreover, another possible confusion is due to the pre increment/decrement operator that can be confused with the post increment/decrement operator, which instead of return the result of the operation it only returns the value of the variable. 
+Consists on the use of the pre increment/decrement unary operators (`++` and `--`). The pre increment/decrement unary operator increments/decrements the variable it is associated with and returns the result of the expression. The lack of familiarity with this operator generates doubts about its operation, which can cause confusion. Moreover, another possible confusion is due to the pre increment/decrement operator that can be confused with the post increment/decrement operator, which instead of return the result of the operation it only returns the value of the variable. 
 
 BOHR detects occurrences of this atom when the pre increment/decrement operator appears in:
 
@@ -72,9 +76,9 @@ private static int method() {
 
 ## Post Increment/Decrement
 
-The Post Increment Decrement atom is, in a sense, complementary to the Pre Increment Decrement explained earlier. Likewise, this atom is also based on the use of a unary operator, but in this case it is the post increment/decrement operator. As explained before, the difference is that instead of the result of the expression the original value of the variable is returned. The confusion caused by this atom is also due to a lack of familiarity with how it works, as well as the fact that the post increment/decrement operator can be confused with the pre increment/decrement operator. 
+The *Post Increment/Decrement* atom is, in a sense, complementary to the *Pre Increment Decrement* explained earlier. Likewise, this atom is also based on the use of a unary operator, but in this case it is the post increment/decrement operator. As explained before, the difference is that instead of the result of the expression the original value of the variable is returned. The confusion caused by this atom is also due to a lack of familiarity with how it works, as well as the fact that the *Post Increment/Decrement* operator can be confused with the *Pre Increment/Decrement* operator. 
 
-BOHR detects occurrences of this atom when the post increment/decrement operator appears in:
+BOHR detects occurrences of this atom when the *Post Increment/Decrement* operator appears in:
 
 
 1. variable assignments;
@@ -128,7 +132,7 @@ private static int method() {
 
 ## Conditional Operator
 
-This atom is based on the use of the ternary operator (?:), which is a shortened form of the if-then-else code structure. The syntax of the ternary operator can cause confusion for developers who are not familiar with this structure. BOHR captures all occurrences of the ternary operator as Condition Operator atom.
+This atom is based on the use of the ternary operator (`<cond-expr> ? <true-expr> : <false-expr>`), which is a shortened form of the if-then-else code structure. The syntax of the ternary operator can cause confusion for developers who are not familiar with this structure. BOHR captures all occurrences of the ternary operator as *Condition Operator* atom.
 
 ```
 int a = 4;
@@ -186,15 +190,15 @@ if(a - 5 != 0) {
 
 ## Logic as Control Flow
 
-This atom is based on the \enquote{lazy} behavior of the logical operators \texttt{\&\&} and \texttt{||}, where depending on the value of the left-hand side expression, the right-hand side expression may or may not be executed. In this way, these logical operators can also be used as conditionals. 
+This atom is based on the `lazy` behavior of the logical operators `&&` and `||`, where depending on the value of the left-hand side expression, the right-hand side expression may or may not be executed. In this way, these logical operators can also be used as conditionals. 
 
-BOHR considers the code snippet to be \textit{Logic as Control Flow} when there is, on the right-hand side of the logic operation, some operation that indicates or may indicate some change of values of system variables. BOHR considers the following types of these operations:
+BOHR considers the code snippet to be *Logic as Control Flow* when there is, on the right-hand side of the logic operation, some operation that indicates or may indicate some change of values of system variables. BOHR considers the following types of these operations:
 
 1. unary operators;
 2. variable assignments;
 3. method invocations
 
-Therefore, if any of these types of instructions occur on the right-hand side of a logical operation of the && and II operators, the BOHR will understand it as an occurrence of Logic as Control Flow atom.
+Therefore, if any of these types of instructions occur on the right-hand side of a logical operation of the `&&` and II operators, the BOHR will understand it as an occurrence of *Logic as Control Flow* atom.
 
 ```
 int a = 1;
@@ -223,14 +227,14 @@ if(a > 0 && otherMethod()) {
 ## Change of Literal Encoding
 
 To represent numerical values in programs we tend to use decimal format, and occasionally binary, hexadecimal or octal for specific cases. Even if they contain the same number, these different representations can create confusion in understanding the values. In this sense, This atom is based on the use of different formats for the representation of numeric values that can cause confusion in the understanding of the program.
-BOHR detects cases of Change of Literal Encoding when:
+BOHR detects cases of *Change of Literal Encoding* when:
 
 1. a literal numeric value beginning with zero is located, indicating that it is an octal representation;
 ```
 int a = 013;
 ```
 
-2. a bitand, bitor or bitxor (&, | or ^) operation where at least one of the operands is a literal and is in decimal format.
+2. a bitand, bitor or bitxor (`&`, `|` or `^`) operation where at least one of the operands is a literal and is in decimal format.
 ```
 int a = 11 & 32;
 ```
@@ -241,7 +245,7 @@ Consists of the confusion that can be caused due to a lack of clarity in the sep
 
 1. have a single code instruction;
 2. do not have keys encapsulating this instruction;
-3. the next instruction of the program must appear on the same line as the instruction belonging to that structure, if-then-else, for or while.
+3. the next instruction of the program must appear on the same line as the instruction belonging to that structure, `if-then-else`, `for`, or `while`.
 
 ```
 if(a <= 4) 
@@ -260,7 +264,7 @@ while(a < 4)
 ## Type Conversion
 
 This atom occurs when there is a conversion from a larger data type to a smaller type, this type of conversion is known as Narrowing Conversion, for example, the conversion of a data type from float to int. In these cases there can be losses of precision, causing results that may be unexpected by the programmer. In Java we have several situations where there can be losses of precision in data conversions between primitive types. 
-BOHR detects all possible cases of Type Conversion between primitive types in Java. Here is the list of possible situations:
+BOHR detects all possible cases of *Type Conversion* between primitive types in Java. Here is the list of possible situations:
 
 - short to byte or char;
 - char to byte or short;
@@ -271,9 +275,9 @@ BOHR detects all possible cases of Type Conversion between primitive types in Ja
 
 Conversions involving the primitive type char add another layer of complexity, since char is the only type that is unsigned, and converting characters to numbers is not intuitive.
 
-Using APIs in explicit conversions of the Narrowing type, such as java.lang.Math and java.lang.Character, for example, tends to make the code more readable. Also in this type of conversion, the use of the % (modulo) operator can indicate a treatment on the data to be converted. This is achieved by modulus operation of the data of larger type, data to be converted, with the number of possible values that the data of smaller type can represent, 256 numbers in the case of byte, for example.
+Using APIs in explicit conversions of the Narrowing type, such as `java.lang.Math and java.lang.Character`, for example, tends to make the code more readable. Also in this type of conversion, the use of the `%` (modulus) operator can indicate a treatment on the data to be converted. This is achieved by modulus operation of the data of larger type, data to be converted, with the number of possible values that the data of smaller type can represent, `256` numbers in the case of byte, for example.
 
-To be considered a Type Conversion the data conversion must be explicit and:
+To be considered a *Type Conversion* the data conversion must be explicit and:
 
 1. not present method invocation in this process. A method invocation may indicate a possible use of APIs for handling the conversion;
 2. not present a modulo operation of the data to be converted, and
